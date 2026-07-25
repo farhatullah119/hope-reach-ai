@@ -9,11 +9,41 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiAnalyzeRouteImport } from './routes/api/analyze'
 
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +67,22 @@ const ApiAnalyzeRoute = ApiAnalyzeRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/resources': typeof ResourcesRoute
   '/api/analyze': typeof ApiAnalyzeRoute
   '/api/chat': typeof ApiChatRoute
   '/api/translate': typeof ApiTranslateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/resources': typeof ResourcesRoute
   '/api/analyze': typeof ApiAnalyzeRoute
   '/api/chat': typeof ApiChatRoute
   '/api/translate': typeof ApiTranslateRoute
@@ -50,20 +90,58 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/resources': typeof ResourcesRoute
   '/api/analyze': typeof ApiAnalyzeRoute
   '/api/chat': typeof ApiChatRoute
   '/api/translate': typeof ApiTranslateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/analyze' | '/api/chat' | '/api/translate'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/contact'
+    | '/faq'
+    | '/resources'
+    | '/api/analyze'
+    | '/api/chat'
+    | '/api/translate'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/analyze' | '/api/chat' | '/api/translate'
-  id: '__root__' | '/' | '/api/analyze' | '/api/chat' | '/api/translate'
+  to:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/contact'
+    | '/faq'
+    | '/resources'
+    | '/api/analyze'
+    | '/api/chat'
+    | '/api/translate'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/contact'
+    | '/faq'
+    | '/resources'
+    | '/api/analyze'
+    | '/api/chat'
+    | '/api/translate'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
+  ResourcesRoute: typeof ResourcesRoute
   ApiAnalyzeRoute: typeof ApiAnalyzeRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
@@ -71,6 +149,41 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +217,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
+  ResourcesRoute: ResourcesRoute,
   ApiAnalyzeRoute: ApiAnalyzeRoute,
   ApiChatRoute: ApiChatRoute,
   ApiTranslateRoute: ApiTranslateRoute,
