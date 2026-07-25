@@ -17,10 +17,8 @@ export const Route = createFileRoute("/api/translate")({
           const gateway = createLovableAiGatewayProvider(key);
           const { text: out } = await generateText({
             model: gateway("google/gemini-3.6-flash"),
-            messages: [
-              { role: "system", content: `You are a professional translator. Translate the user's text from ${NAME[from]} to ${NAME[to]}. Preserve meaning, tone and formatting. Output ONLY the translation, no explanations.` },
-              { role: "user", content: text },
-            ],
+            system: `You are a professional translator. Translate the user's text from ${NAME[from]} to ${NAME[to]}. Preserve meaning, tone and formatting. Output ONLY the translation, no explanations.`,
+            messages: [{ role: "user", content: text }],
           });
           return Response.json({ text: out });
         } catch (e: unknown) {

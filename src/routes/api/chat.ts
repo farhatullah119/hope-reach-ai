@@ -20,10 +20,8 @@ export const Route = createFileRoute("/api/chat")({
             : "";
           const { text } = await generateText({
             model: gateway("google/gemini-3.6-flash"),
-            messages: [
-              { role: "system", content: SYSTEM_ASSISTANT + langHint },
-              ...body.messages.filter((m) => m.role !== "system"),
-            ],
+            system: SYSTEM_ASSISTANT + langHint,
+            messages: body.messages.filter((m) => m.role !== "system"),
           });
           return Response.json({ text });
         } catch (e: unknown) {
