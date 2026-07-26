@@ -1,18 +1,6 @@
 import { Link, useRouter } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import {
-  LayoutDashboard,
-  Users,
-  Newspaper,
-  Hospital,
-  Mail,
-  ScrollText,
-  ShieldCheck,
-  Menu,
-  X,
-  ArrowLeft,
-  LogOut,
-} from "lucide-react";
+import { LayoutDashboard, ScrollText, ShieldCheck, Menu, X, ArrowLeft, LogOut } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
