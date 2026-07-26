@@ -2,23 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/AppLayout";
 import { useI18n } from "@/lib/i18n";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useServerFn } from "@tanstack/react-start";
+import { submitContactMessage, contactSchema } from "@/lib/contact.functions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { z } from "zod";
-import { Mail, Phone } from "lucide-react";
-
-const schema = z.object({
-  full_name: z.string().trim().min(1).max(100),
-  email: z.string().trim().email().max(255),
-  phone: z.string().trim().max(30).optional(),
-  subject: z.string().trim().min(1).max(150),
-  message: z.string().trim().min(1).max(2000),
-});
+import { Mail, Phone, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({ meta: [
@@ -32,22 +23,34 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const { t } = useI18n();
-  const { user } = useAuth();
+  const send = useServerFn(submitContactMessage);
   const [form, setForm] = useState({ full_name: "", email: "", phone: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<{ kind: "success" | "error"; text: string } | null>(null);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const parsed = schema.safeParse(form);
-    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Please check the form"); return; }
+    const parsed = contactSchema.safeParse(form);
+    if (!parsed.success) {
+      const msg = parsed.error.issues[0]?.message ?? "Please check the form";
+      setStatus({ kind: "error", text: msg });
+      toast.error(msg);
+      return;
+    }
+    setStatus(null);
     setLoading(true);
-    const { error } = await supabase.from("contact_messages").insert({
-      ...parsed.data, user_id: user?.id ?? null,
-    });
-    setLoading(false);
-    if (error) { toast.error(error.message); return; }
-    toast.success(t("sent"));
-    setForm({ full_name: "", email: "", phone: "", subject: "", message: "" });
+    try {
+      await send({ data: parsed.data });
+      setStatus({ kind: "success", text: t("sent") });
+      toast.success(t("sent"));
+      setForm({ full_name: "", email: "", phone: "", subject: "", message: "" });
+    } catch (err) {
+      const msg = err instanceof Error && err.message ? err.message : "Something went wrong. Please try again.";
+      setStatus({ kind: "error", text: msg });
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -62,6 +65,24 @@ function Contact() {
           </div>
         </div>
         <form onSubmit={submit} className="md:col-span-3 glass rounded-2xl p-6 space-y-4">
+          {status && (
+            <div
+              role="status"
+              aria-live="polite"
+              className={
+                status.kind === "success"
+                  ? "flex items-start gap-2 rounded-xl border border-secondary/40 bg-secondary/10 p-3 text-sm text-foreground"
+                  : "flex items-start gap-2 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-sm text-foreground"
+              }
+            >
+              {status.kind === "success" ? (
+                <CheckCircle2 className="h-4 w-4 mt-0.5 text-secondary" />
+              ) : (
+                <AlertCircle className="h-4 w-4 mt-0.5 text-destructive" />
+              )}
+              <span>{status.text}</span>
+            </div>
+          )}
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="n">{t("field_name")}</Label>
@@ -84,7 +105,16 @@ function Contact() {
             <Label htmlFor="m">{t("field_message")}</Label>
             <Textarea id="m" rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required maxLength={2000} />
           </div>
-          <Button type="submit" disabled={loading} className="w-full">{loading ? t("sending") : t("submit")}</Button>
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {t("sending")}
+              </>
+            ) : (
+              t("submit")
+            )}
+          </Button>
         </form>
       </section>
     </AppLayout>
