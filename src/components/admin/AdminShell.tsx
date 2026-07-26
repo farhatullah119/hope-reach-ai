@@ -19,10 +19,6 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin/users", label: "Users", icon: Users },
-  { to: "/admin/articles", label: "Health Articles", icon: Newspaper },
-  { to: "/admin/hospitals", label: "Hospitals", icon: Hospital },
-  { to: "/admin/messages", label: "Messages", icon: Mail },
   { to: "/admin/logs", label: "Activity Log", icon: ScrollText },
 ] as const;
 
