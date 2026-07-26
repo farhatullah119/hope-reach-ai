@@ -3,12 +3,9 @@
  */
 export type AdminCtx = { userId: string; email: string | null };
 
-type SupabaseLike = {
-  rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>;
-};
-
 export async function requireAdmin(ctx: {
-  supabase: SupabaseLike;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any;
   userId: string;
   claims?: Record<string, unknown> | null;
 }): Promise<AdminCtx> {
