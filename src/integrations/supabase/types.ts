@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          admin_email: string | null
+          admin_id: string
+          created_at: string
+          details: Json | null
+          entity: string
+          entity_id: string | null
+          id: string
+        }
+        Insert: {
+          action: string
+          admin_email?: string | null
+          admin_id: string
+          created_at?: string
+          details?: Json | null
+          entity: string
+          entity_id?: string | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          admin_email?: string | null
+          admin_id?: string
+          created_at?: string
+          details?: Json | null
+          entity?: string
+          entity_id?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
       chat_conversations: {
         Row: {
           created_at: string
@@ -75,6 +108,7 @@ export type Database = {
       }
       contact_messages: {
         Row: {
+          admin_reply: string | null
           created_at: string
           email: string
           emailed_at: string | null
@@ -82,12 +116,15 @@ export type Database = {
           id: string
           message: string
           phone: string | null
+          read_at: string | null
+          replied_at: string | null
           status: string
           subject: string
           user_id: string | null
           user_ip: string | null
         }
         Insert: {
+          admin_reply?: string | null
           created_at?: string
           email: string
           emailed_at?: string | null
@@ -95,12 +132,15 @@ export type Database = {
           id?: string
           message: string
           phone?: string | null
+          read_at?: string | null
+          replied_at?: string | null
           status?: string
           subject: string
           user_id?: string | null
           user_ip?: string | null
         }
         Update: {
+          admin_reply?: string | null
           created_at?: string
           email?: string
           emailed_at?: string | null
@@ -108,6 +148,8 @@ export type Database = {
           id?: string
           message?: string
           phone?: string | null
+          read_at?: string | null
+          replied_at?: string | null
           status?: string
           subject?: string
           user_id?: string | null
@@ -151,6 +193,192 @@ export type Database = {
         }
         Relationships: []
       }
+      health_articles: {
+        Row: {
+          author_id: string | null
+          category: string
+          content: string
+          created_at: string
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          language: string
+          published: boolean
+          slug: string
+          title: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          author_id?: string | null
+          category?: string
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          language?: string
+          published?: boolean
+          slug: string
+          title: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          author_id?: string | null
+          category?: string
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          language?: string
+          published?: boolean
+          slug?: string
+          title?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
+      hospitals: {
+        Row: {
+          address: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          description: string | null
+          email: string | null
+          emergency_24_7: boolean
+          id: string
+          maps_url: string | null
+          name: string
+          opening_hours: string | null
+          phone: string | null
+          services: string[] | null
+          sort_order: number
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          emergency_24_7?: boolean
+          id?: string
+          maps_url?: string | null
+          name: string
+          opening_hours?: string | null
+          phone?: string | null
+          services?: string[] | null
+          sort_order?: number
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          emergency_24_7?: boolean
+          id?: string
+          maps_url?: string | null
+          name?: string
+          opening_hours?: string | null
+          phone?: string | null
+          services?: string[] | null
+          sort_order?: number
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      medical_records: {
+        Row: {
+          created_at: string
+          details: string | null
+          file_path: string | null
+          id: string
+          record_type: string
+          recorded_on: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          file_path?: string | null
+          id?: string
+          record_type?: string
+          recorded_on?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          file_path?: string | null
+          id?: string
+          record_type?: string
+          recorded_on?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      medicine_reminders: {
+        Row: {
+          active: boolean
+          created_at: string
+          dosage: string | null
+          end_date: string | null
+          frequency: string | null
+          id: string
+          medicine_name: string
+          notes: string | null
+          start_date: string | null
+          times: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          dosage?: string | null
+          end_date?: string | null
+          frequency?: string | null
+          id?: string
+          medicine_name: string
+          notes?: string | null
+          start_date?: string | null
+          times?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          dosage?: string | null
+          end_date?: string | null
+          frequency?: string | null
+          id?: string
+          medicine_name?: string
+          notes?: string | null
+          start_date?: string | null
+          times?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -158,6 +386,7 @@ export type Database = {
           full_name: string | null
           id: string
           preferred_language: string
+          status: string
           updated_at: string
         }
         Insert: {
@@ -166,6 +395,7 @@ export type Database = {
           full_name?: string | null
           id: string
           preferred_language?: string
+          status?: string
           updated_at?: string
         }
         Update: {
@@ -174,6 +404,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           preferred_language?: string
+          status?: string
           updated_at?: string
         }
         Relationships: []
@@ -217,15 +448,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -352,6 +610,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
