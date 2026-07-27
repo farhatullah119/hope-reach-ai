@@ -26,7 +26,11 @@ import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin/users'
+import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin/messages'
 import { Route as AuthenticatedAdminLogsRouteImport } from './routes/_authenticated/admin/logs'
+import { Route as AuthenticatedAdminHospitalsRouteImport } from './routes/_authenticated/admin/hospitals'
+import { Route as AuthenticatedAdminArticlesRouteImport } from './routes/_authenticated/admin/articles'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -113,11 +117,34 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
+const AuthenticatedAdminMessagesRoute =
+  AuthenticatedAdminMessagesRouteImport.update({
+    id: '/messages',
+    path: '/messages',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminLogsRoute = AuthenticatedAdminLogsRouteImport.update({
   id: '/logs',
   path: '/logs',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminHospitalsRoute =
+  AuthenticatedAdminHospitalsRouteImport.update({
+    id: '/hospitals',
+    path: '/hospitals',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminArticlesRoute =
+  AuthenticatedAdminArticlesRouteImport.update({
+    id: '/articles',
+    path: '/articles',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
   id: '/api/public/media/$',
   path: '/api/public/media/$',
@@ -140,7 +167,11 @@ export interface FileRoutesByFullPath {
   '/api/analyze': typeof ApiAnalyzeRoute
   '/api/chat': typeof ApiChatRoute
   '/api/translate': typeof ApiTranslateRoute
+  '/admin/articles': typeof AuthenticatedAdminArticlesRoute
+  '/admin/hospitals': typeof AuthenticatedAdminHospitalsRoute
   '/admin/logs': typeof AuthenticatedAdminLogsRoute
+  '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
@@ -159,7 +190,11 @@ export interface FileRoutesByTo {
   '/api/analyze': typeof ApiAnalyzeRoute
   '/api/chat': typeof ApiChatRoute
   '/api/translate': typeof ApiTranslateRoute
+  '/admin/articles': typeof AuthenticatedAdminArticlesRoute
+  '/admin/hospitals': typeof AuthenticatedAdminHospitalsRoute
   '/admin/logs': typeof AuthenticatedAdminLogsRoute
+  '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
@@ -181,7 +216,11 @@ export interface FileRoutesById {
   '/api/analyze': typeof ApiAnalyzeRoute
   '/api/chat': typeof ApiChatRoute
   '/api/translate': typeof ApiTranslateRoute
+  '/_authenticated/admin/articles': typeof AuthenticatedAdminArticlesRoute
+  '/_authenticated/admin/hospitals': typeof AuthenticatedAdminHospitalsRoute
   '/_authenticated/admin/logs': typeof AuthenticatedAdminLogsRoute
+  '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
@@ -203,7 +242,11 @@ export interface FileRouteTypes {
     | '/api/analyze'
     | '/api/chat'
     | '/api/translate'
+    | '/admin/articles'
+    | '/admin/hospitals'
     | '/admin/logs'
+    | '/admin/messages'
+    | '/admin/users'
     | '/admin/'
     | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
@@ -222,7 +265,11 @@ export interface FileRouteTypes {
     | '/api/analyze'
     | '/api/chat'
     | '/api/translate'
+    | '/admin/articles'
+    | '/admin/hospitals'
     | '/admin/logs'
+    | '/admin/messages'
+    | '/admin/users'
     | '/admin'
     | '/api/public/media/$'
   id:
@@ -243,7 +290,11 @@ export interface FileRouteTypes {
     | '/api/analyze'
     | '/api/chat'
     | '/api/translate'
+    | '/_authenticated/admin/articles'
+    | '/_authenticated/admin/hospitals'
     | '/_authenticated/admin/logs'
+    | '/_authenticated/admin/messages'
+    | '/_authenticated/admin/users'
     | '/_authenticated/admin/'
     | '/api/public/media/$'
   fileRoutesById: FileRoutesById
@@ -385,11 +436,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/users': {
+      id: '/_authenticated/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/messages': {
+      id: '/_authenticated/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AuthenticatedAdminMessagesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/logs': {
       id: '/_authenticated/admin/logs'
       path: '/logs'
       fullPath: '/admin/logs'
       preLoaderRoute: typeof AuthenticatedAdminLogsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/hospitals': {
+      id: '/_authenticated/admin/hospitals'
+      path: '/hospitals'
+      fullPath: '/admin/hospitals'
+      preLoaderRoute: typeof AuthenticatedAdminHospitalsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/articles': {
+      id: '/_authenticated/admin/articles'
+      path: '/articles'
+      fullPath: '/admin/articles'
+      preLoaderRoute: typeof AuthenticatedAdminArticlesRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/api/public/media/$': {
@@ -403,13 +482,21 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminArticlesRoute: typeof AuthenticatedAdminArticlesRoute
+  AuthenticatedAdminHospitalsRoute: typeof AuthenticatedAdminHospitalsRoute
   AuthenticatedAdminLogsRoute: typeof AuthenticatedAdminLogsRoute
+  AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
+  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminArticlesRoute: AuthenticatedAdminArticlesRoute,
+    AuthenticatedAdminHospitalsRoute: AuthenticatedAdminHospitalsRoute,
     AuthenticatedAdminLogsRoute: AuthenticatedAdminLogsRoute,
+    AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
+    AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   }
 

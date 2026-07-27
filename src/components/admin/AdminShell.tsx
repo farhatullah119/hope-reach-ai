@@ -1,12 +1,16 @@
 import { Link, useRouter } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { LayoutDashboard, ScrollText, ShieldCheck, Menu, X, ArrowLeft, LogOut } from "lucide-react";
+import { LayoutDashboard, ScrollText, ShieldCheck, Menu, X, ArrowLeft, LogOut, Users, FileText, Building2, Inbox } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/admin/users", label: "Users", icon: Users },
+  { to: "/admin/articles", label: "Health Articles", icon: FileText },
+  { to: "/admin/hospitals", label: "Hospitals", icon: Building2 },
+  { to: "/admin/messages", label: "Messages", icon: Inbox },
   { to: "/admin/logs", label: "Activity Log", icon: ScrollText },
 ] as const;
 
