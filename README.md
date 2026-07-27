@@ -1,4 +1,4 @@
-Hope Reach AI
+**Hope Reach AI**
 
 🌍 AI-Powered Healthcare Assistant for Refugees and Underserved Communities
 
@@ -9,6 +9,7 @@ Welcome to **Hope Reach AI**, an AI-powered healthcare platform developed to pro
 **Farhat Ullah**
 
 🎓 **Bachelor of Science in Computer Science (BSCS)**
+
 🏫 **University of Malakand**
 
 🌐 Live Application
@@ -21,7 +22,7 @@ Welcome to **Hope Reach AI**, an AI-powered healthcare platform developed to pro
 
 GitHub Repository
 
-🔗 https://github.com/farhatullah119/hope-reach-ai
+🔗 **https://github.com/farhatullah119/hope-reach-ai**
 
 ---
 
@@ -223,7 +224,7 @@ npm run dev
 The application is deployed on **Vercel**.
 
 **Live URL:**
-[https://hope-reach-ai.vercel.app](https://hope-reach-ai.vercel.app)
+https://hope-reach-ai.vercel.app)
 
 ---
 
@@ -346,28 +347,4 @@ Together, we can make reliable healthcare information more accessible through th
 
 This project was built with [Lovable](https://lovable.dev).
 
-## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
