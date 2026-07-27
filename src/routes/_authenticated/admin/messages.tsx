@@ -65,7 +65,7 @@ function MessagesPage() {
       actions={
         <Button size="sm" variant="outline" onClick={async () => {
           try {
-            const res = await exportCsv({ data: {} });
+            const res = await exportCsv();
             const url = URL.createObjectURL(new Blob([res.csv], { type: "text/csv" }));
             const a = document.createElement("a");
             a.href = url; a.download = `contact-messages-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
