@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppLayout } from "@/components/AppLayout";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
@@ -10,10 +10,14 @@ import { Plus, Send, MessageSquare } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/assistant")({
+export const Route = createFileRoute("/assistant")({
   head: () => ({ meta: [
     { title: "AI Assistant — ISF Hub AI" },
-    { name: "description", content: "Chat with the ISF Hub AI Refugee Assistant about scholarships, UNHCR, health, jobs, legal aid and more." },
+    { name: "description", content: "Chat free with the ISF Hub AI Refugee Assistant about scholarships, UNHCR, health, jobs, legal aid and more. No sign-in required." },
+    { property: "og:title", content: "AI Assistant — ISF Hub AI" },
+    { property: "og:description", content: "Free multilingual AI assistant for refugees and vulnerable communities. No sign-in required." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
   ]}),
   component: Assistant,
 });
@@ -32,40 +36,43 @@ function Assistant() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) { setConvs([]); return; }
     supabase.from("chat_conversations").select("id,title,updated_at").order("updated_at", { ascending: false })
       .then(({ data }) => setConvs((data as Conv[]) ?? []));
   }, [user]);
 
   useEffect(() => {
-    if (!activeId) { setMsgs([]); return; }
+    if (!activeId) return;
     supabase.from("chat_messages").select("role,content").eq("conversation_id", activeId).order("created_at")
       .then(({ data }) => setMsgs(((data as { role: string; content: string }[] | null) ?? []).filter(m => m.role !== "system").map(m => ({ role: m.role as "user" | "assistant", content: m.content }))));
   }, [activeId]);
 
   useEffect(() => { scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }); }, [msgs]);
 
-  async function newChat() { setActiveId(null); setMsgs([]); }
+  function newChat() { setActiveId(null); setMsgs([]); }
 
   async function send() {
-    if (!input.trim() || sending || !user) return;
+    if (!input.trim() || sending) return;
     const text = input.trim();
     setInput("");
     setSending(true);
 
     let convId = activeId;
-    if (!convId) {
+    if (user && !convId) {
       const { data, error } = await supabase.from("chat_conversations")
         .insert({ user_id: user.id, title: text.slice(0, 50) }).select("id,title,updated_at").single();
-      if (error || !data) { toast.error(error?.message ?? "Failed"); setSending(false); return; }
-      convId = data.id;
-      setActiveId(convId);
-      setConvs((c) => [data as Conv, ...c]);
+      if (!error && data) {
+        convId = data.id;
+        setActiveId(convId);
+        setConvs((c) => [data as Conv, ...c]);
+      }
     }
 
     const nextMsgs: Msg[] = [...msgs, { role: "user", content: text }];
     setMsgs(nextMsgs);
-    await supabase.from("chat_messages").insert({ conversation_id: convId, user_id: user.id, role: "user", content: text });
+    if (user && convId) {
+      await supabase.from("chat_messages").insert({ conversation_id: convId, user_id: user.id, role: "user", content: text });
+    }
 
     try {
       const res = await fetch("/api/chat", {
@@ -75,8 +82,10 @@ function Assistant() {
       if (!res.ok) throw new Error(await res.text());
       const json = (await res.json()) as { text: string };
       setMsgs((m) => [...m, { role: "assistant", content: json.text }]);
-      await supabase.from("chat_messages").insert({ conversation_id: convId, user_id: user.id, role: "assistant", content: json.text });
-      await supabase.from("chat_conversations").update({ updated_at: new Date().toISOString() }).eq("id", convId);
+      if (user && convId) {
+        await supabase.from("chat_messages").insert({ conversation_id: convId, user_id: user.id, role: "assistant", content: json.text });
+        await supabase.from("chat_conversations").update({ updated_at: new Date().toISOString() }).eq("id", convId);
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "AI request failed");
     } finally {
@@ -87,20 +96,29 @@ function Assistant() {
   return (
     <AppLayout>
       <section className="mx-auto max-w-7xl px-4 py-6 grid md:grid-cols-[260px_1fr] gap-4 h-[calc(100dvh-8rem)]">
-        <aside className="glass rounded-2xl p-3 overflow-y-auto">
+        <aside className="glass rounded-2xl p-3 overflow-y-auto hidden md:block">
           <Button onClick={newChat} className="w-full gap-2 mb-3"><Plus className="h-4 w-4" /> {t("new_chat")}</Button>
-          <div className="space-y-1">
-            {convs.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => setActiveId(c.id)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-muted transition truncate ${activeId === c.id ? "bg-accent text-accent-foreground" : ""}`}
-              >
-                <MessageSquare className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5" />{c.title}
-              </button>
-            ))}
-            {convs.length === 0 && <p className="text-xs text-muted-foreground px-3 py-2">No chats yet.</p>}
-          </div>
+          {user ? (
+            <div className="space-y-1">
+              {convs.map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => setActiveId(c.id)}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-muted transition truncate ${activeId === c.id ? "bg-accent text-accent-foreground" : ""}`}
+                >
+                  <MessageSquare className="inline h-3.5 w-3.5 mr-1.5 -mt-0.5" />{c.title}
+                </button>
+              ))}
+              {convs.length === 0 && <p className="text-xs text-muted-foreground px-3 py-2">No chats yet.</p>}
+            </div>
+          ) : (
+            <div className="px-3 py-2 space-y-2">
+              <p className="text-xs text-muted-foreground">You're chatting as a guest. Sign in to save your chat history.</p>
+              <Link to="/auth" search={{ mode: "signin" }}>
+                <Button variant="outline" size="sm" className="w-full">Sign in</Button>
+              </Link>
+            </div>
+          )}
         </aside>
 
         <div className="glass rounded-2xl flex flex-col overflow-hidden">
