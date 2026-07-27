@@ -17,6 +17,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const publicLinks: { to: string; label: string }[] = [
     { to: "/", label: t("nav_home") },
     { to: "/about", label: t("nav_about") },
+    { to: "/assistant", label: t("nav_assistant") },
     { to: "/resources", label: t("nav_resources") },
     { to: "/faq", label: t("nav_faq") },
     { to: "/contact", label: t("nav_contact") },
